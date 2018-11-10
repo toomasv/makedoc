@@ -1,0 +1,417 @@
+Easy VID - Red Visual Interfaces
+
+===Introduction to VID
+
+Creating custom user interfaces is easy with VID. In half an hour
+you can learn how to use VID to create useful interfaces in Red.
+
+VID is the Visual Interface Dialect, a dialect of the Red language
+that is built into every instance of Red. VID provides a powerful
+method of describing user interfaces, yet VID is simple to learn.
+In addition, VID provides a smooth path from basic user interfaces
+to sophisticated applications.
+
+---Creating VID Scripts
+
+Any text editor can be used to create a VID script.  You can
+build the text editor in Red or use your own favorite editor.
+Save your file as text, then run it with Red.
+
+!Note: Using a word processor like Word or Wordpad is not
+recommended unless you save your files as text. Saving as
+a doc file will not work.
+
+===Minimal Example
+
+As a minimal example, you can create a window that displays a
+line of text using just one line of code.  Here is an example:
+
+	view [text "Hello Red World!"]
+
+You can also display buttons and other gadgets using a single
+line.  The example below will display a list of files and a
+button:
+
+	view [below text-list data read %. button "OK"]
+
+!If you are executing this file in Red you can click on the
+examples above to see how they will appear on your screen.
+Click on their close box to remove them.  All of the examples
+that follow can be viewed this way.
+
+===Two Basic Functions
+
+Two functions are used to create graphical user interfaces
+in Red: view and layout.
+
+The layout function creates a set of graphical objects.  These
+objects are called faces.  You describe faces by providing
+descriptions in a block that is passed to the layout function.
+
+The view function displays faces that were previously created
+by the layout function. The example below shows how the result
+of the layout function is passed to the view function, and the
+layout is displayed.
+
+	view layout [below text "This is just an example." button "Ok"]
+
+While you may call layout function explicitly, view function
+can call it implicitly for you to make things even simpler:
+
+	view [below text "This is just an example." button "Ok"]
+
+Click on the above examples to view them (if you are executing this
+file in Red).
+
+!Note: the block provided to a layout or view is not normal Red
+code, but actually a dialect (VID) of Red.  Using a dialect
+makes it much easier for you to express user interfaces.
+
+===Styles
+
+Styles describe faces.  The examples above use the text and
+button styles to specify a text line and a push button. Red has
+27 predefined styles, and you can easily create your own custom
+styles.  Here are a few example styles used with layout:
+
+	view [
+		below
+		h4 "Style Examples"
+		box red 240x2
+		text bold "There are 27 styles built into Red."
+		button "Great"
+		text-list 120x80 data ["this" "is" "text-list"] 
+		across
+		check "Checkbox"
+		radio "Radio-1" radio "Radio-2"
+		return
+		field 100 "Text Entry Field"
+	]
+
+The words like h4, box, text, button, text-list, check, radio,
+and field are styles.
+
+===Facets
+
+Facets let you modify a style.  For instance, you can change
+the text, color, size, font, image, and other facets of a style.
+
+Facets follow the style name.  Here is an example that shows
+how you modify the text style to be bold and navy blue:
+
+	view [text bold font-color navy "Facets are easy to use."]
+
+The words bold and navy are not styles.  They are facets 
+that modify a style. 
+
+Facets can appear in any order, so you don't have to remember
+which one goes first.  For example, the line above could be
+written as:
+
+	view [text "Facets are easy to use." font-color navy bold]
+
+There are many facets that can be used.  Here is an example that
+creates bold red text centered in a black box.
+
+	view [text 300 bold black red center "Red Text"]
+
+===Custom Styles
+
+Creating custom styles saves time.  When you define a custom style,
+the facets you need go into the style.  This reduces what you need
+to specify each time you use the style, and it allows you to modify
+the look of your interface by changing the style definitions.
+
+For example, here is a layout that defines a style for red
+buttons.  The style word defines the new style, followed by the
+old style name and its facets.
+
+	view [
+		below
+		style square: button 50x50
+		text "Testing button style:"
+		square "Test"
+		square "Red"
+		button "Normal"
+	]
+
+So, if you wanted to create a text style for big, bold, underlined,
+yellow text:
+
+	view [
+		backdrop silver below
+		style yell: text bold underline silver yellow font-size 16
+		yell "Hello!!"
+		yell "This is big old text."
+		yell "Goodbye!"
+	]
+
+===Note About Examples
+
+!From this point forward, all examples will assume that the view
+function is provided and face flow is set to below.  Only the layout
+block contents will be shown.  To use these examples in your scripts,
+you will need to put them in a layout block and set flow to below,
+as was shown earlier.
+
+For example, code that is written as:
+
+	view [
+		below
+		text "Layout examples"
+		button "Test it"
+	]
+
+will now appear as:
+
+	text "Layout examples"
+	button "Test it"
+
+===Face Sizes
+
+The size of a face depends on its style.  Most styles, such as buttons,
+toggles, boxes, checks, text-lists, and fields, have a convenient default
+size.  Here are some examples.
+
+	button "Button"
+	box blue
+	field
+	text-list
+
+If no size is given, text's size is automatically computed, and face's
+size is increased if text is larger than default size of the face.
+Images will use whatever their source size is:
+
+	text silver "Short"
+	text silver "Short text line"
+	text silver "This is a much longer line of text than that above."
+	button "Longer text on button"
+	image %ferns.jpg
+
+You can change the size of any face by providing a size facet. The size can 
+be an integer or a pair.  An integer specifies the width of the face. A pair 
+specifies both width and height. Images will be stretched to fit the size.
+
+	button 200 "Big Button"
+	button 200x100 "Huge Button"
+	image %ferns.jpg 50x50
+	image %ferns.jpg 150x50
+
+===Color Facets
+
+Most styles have a default color.  For example the text styles will default
+to a black text on snow background.  To modify the color of a face, provide
+a color facet:
+
+	area red "Red area"
+	box orange "Orange box"
+
+Colors can also be specifed as tuples. Each tuple contains three
+numbers: the red, green, and blue components of the color. Each
+component can range from 0 to 255. For example:
+
+	box 200.0.200 "Red + Blue = Magenta" 200
+	field 0.200.200 "Green + Blue"
+
+Some face styles also allow more than one color.  The first color
+will be used for the background and the second color for the font
+of the text:
+
+	text "Yellow on red background" red yellow
+	h5 "White on Navy Blue" navy white
+	box "Multicolor" olive red
+	text-list "Multicolor" blue orange data ["One" "Two" "Three"]
+
+===Text Facets
+
+Most faces will accept text to be displayed.  Even graphical
+faces can display text.  For example, the box and image faces
+will display text if it is provided:
+
+	box blue "Box Face"
+	image %ferns.jpg bold "Image Face"
+
+Some faces need to show more than one text string. The
+strings will be shown in list.
+
+	text-list 80x50 data ["Up" "Down"]
+	drop-list data [
+		"Monday" "Tuesday" "Wednesday" "Thursday" "Friday"
+	]
+	drop-down data [
+		"Monday" "Tuesday" "Wednesday" "Thursday" "Friday"
+	]
+
+When other datatypes need to be displayed as text, use the form
+function to convert them first:
+
+	button 200 (form now)
+	field (form first read %.)
+
+!Note that in last example parens are used to evaluate expressions.
+To use this feature in your script use `compose` command before
+layout block.
+
+===Text Style
+
+By default text is dark on light and can include a number of facets
+to set the font, style, color, size and other attributes.
+
+	text "Normal"
+	text "Bold" bold
+	text "Italic" italic
+	text "Underline" underline
+	text "Bold italic underline" bold italic underline
+	text "Big" font-size 32
+	text "Serif style text" font-name font-serif
+
+Text also includes these predefined styles:
+
+	h1 "Heading 1"
+	h2 "Heading 2"
+	h3 "Heading 3"
+	h4 "Heading 4"
+	h5 "Heading 5"
+
+===Text Entry Fields
+
+Text input fields are field and area.  A text input field can 
+be created with:
+
+	field
+
+Field accepts hint:
+
+	field hint "Password"
+
+Fields will scroll when necessary.  To make the field larger or smaller,
+provide a width:
+
+	field 30 field 300
+
+Larger amounts of text can be entered in an area.  Areas also
+accept an enter key and will break lines.
+
+	area
+
+You can also specify the area size:
+
+	area 160x200
+
+To force the text in an area to wrap rather than scroll
+horizontally, provide the wrap option:
+
+	area wrap
+
+===Text Lists
+
+Text lists are easy to create with block of strings in data facet.
+Here is an example:
+
+	text-list data ["Eureka" "Ukiah" "Mendocino"]
+
+Provided block may contain different types of elements but only
+string-based types are shown.  Here is example of block with
+mixed types:
+
+	text-list data ["First" 1 "Second" two "Third" [3]]
+
+String-based types are formed into standard strings.  Here is a
+list of all the files in your current directory:
+
+	text-list data read %.
+
+If not "stringy", elements you want to be displayed need to be
+converted to strings first.  Here is a list of all the words Red
+has scanned:
+
+	text-list data split form words-of :system/words space
+
+===Images
+
+By default an image will be scaled to fit within a face.
+
+	image 60x60 %ferns.jpg
+	image 150x150 %ferns.jpg
+
+Some other faces can accept an image as well as text:
+
+	box 100x100 %ferns.jpg "This is box"
+	button 60x30 "Button" %ferns.jpg
+	panel bold "This is a panel." %ferns.jpg [field button]
+
+The image can be provided as a filename, URL, or image data.
+
+	image http://www.rebol.com/view/reb/ferns.jpg
+
+===Backdrops
+
+A backdrop can be a color or an image.  For example a backdrop
+color would be written as:
+
+	backdrop navy
+	h4 "Color Backdrop" font-color gold
+
+A backdrop image can be a file, URL, or image data:
+
+	backdrop %ferns.jpg
+	box "Image Backdrop" bold font [color: white size: 18]
+
+===Actions
+
+An action can be associated with any face. To do so,
+follow the face style with a block:
+
+	button "Test" [print "test"]
+
+The block is used as the body of default function that is passed
+the face and event.  For example:
+
+	button "Do it!" [print [face/text event/type]]
+	text "Old text" [
+		old: "Old text" new: "New text" 
+		face/text: either old = face/text [new][old] 
+	]
+
+There are many actions you can call based on different events.
+To call a non-default action put the action name before the block:
+
+	text-list data ["A" "B" "C"] on-change [
+		print pick face/data face/selected
+	]
+
+Use facets to modify the contents or state of other faces.
+For example, the slider will update the progress bar:
+
+	slider 200x16 [p1/data: face/data]
+	p1: progress
+
+!More on actions needed...
+
+===More to Come
+
+!Much more to come.  These still need to be covered in this
+tutorial:
+
+	dl: drop-list data [
+		"Faces" [
+			"check" "radio" "slider" "progress" "scroller"
+			"base" "box" "panel" "tab-panel" "drop-list"
+			"drop-down" "group-box" "rich-text"
+		]
+		"Layout" [
+			"across" "below" "return" "space" "origin"
+			"at" "pad" "do"
+		]
+		"Keywords" [
+			"extra" "data" "font" "para" "loose" "hidden"
+			"disabled" "select" "focus" "default" "with"
+			"draw" "rate" "react"
+		]
+	]
+	select 1
+	on-change [
+		tl/data: select face/data
+			pick face/data face/selected * 2 - 1
+	]
+	tl: text-list data select dl/data "Faces"
