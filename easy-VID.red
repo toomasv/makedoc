@@ -6,25 +6,24 @@ Red [
 	Redate: 10-Nov-2018
 	Purpose: {Adaption of original REBOL easy-VID (http://www.rebol.com/view/reb/easyvid.r) to Red}
 ]
+
 Redate: 10-Nov-2018
 unless attempt [rebolized?] [do %rebolize.red]
 
-ferns: do load-thru http://www.rebol.com/view/reb/ferns.jpg
-unless exists? %ferns.jpg [save %ferns.jpg ferns]
-
 content: read %easy-VID.txt
 
-rt: rtd-layout [""] 
-rt/size: 480x460
-rt/line-spacing: 15
+rt: make face! [type: 'rich-text size: 480x460 line-spacing: 15]
 text-size: func [text][
 	rt/text: text
 	size-text rt
 ]
 
+ferns: do load-thru http://www.rebol.com/view/reb/ferns.jpg
+unless exists? %ferns.jpg [save %ferns.jpg ferns]
+
 code: text: layo: xview: none
-sections: []
-layouts: []
+sections: make block! 50
+layouts: make block! 50
 space: charset " ^-"
 chars: complement charset " ^-^/"
 
@@ -37,14 +36,12 @@ parts: [
 	| "===" section
 	| "---" subsect
 	| "!" note
-	| "_" richtext
 	| example
 	| paragraph
 ]
 
 text-line: [copy text to newline newline]
 indented:  [some space thru newline]
-richtext: [copy para some [chars thru newline] (emit-rich para)]
 paragraph: [copy para some [chars thru newline] (emit-para para)]
 note: [copy para some [chars thru newline] (emit-note para)]
 example: [
@@ -61,15 +58,6 @@ section: [
 subsect: [text-line (emit _h5 text)] 
 
 emit: func ['style data] [repend layo [style data]]
-
-emit-rich: func [data][ 
-	remove back tail data
-	clear rt/data
-	rt/line-spacing: 15
-	sz: text-size data
-	sz/x: 400
-	repend layo ['rich-text sz data]
-]
 
 emit-para: func [data][ 
 	remove back tail data
