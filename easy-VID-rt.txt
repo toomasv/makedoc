@@ -3,9 +3,9 @@ Easy VID - Red Visual Interfaces
 ===Introduction to VID
 
 Creating custom user interfaces is easy with VID. In half an hour
-you can learn how to use VID to create useful interfaces in Red.
+you can learn how to use VID to create useful interfaces in {red}Red{black}.
 
-VID is the Visual Interface Dialect, a dialect of the Red language
+*VID* is the */Visual Interface Dialect/*, a dialect of the Red language
 that is built into every instance of Red. VID provides a powerful
 method of describing user interfaces, yet VID is simple to learn.
 In addition, VID provides a smooth path from basic user interfaces
@@ -17,7 +17,7 @@ Any text editor can be used to create a VID script.  You can
 build the text editor in Red or use your own favorite editor.
 Save your file as text, then run it with Red.
 
-!Note: Using a word processor like Word or Wordpad is not
+!Note: Using a word processor like /Word/ or /Wordpad/ is not
 recommended unless you save your files as text. Saving as
 a doc file will not work.
 
@@ -42,10 +42,10 @@ that follow can be viewed this way.
 ===Two Basic Functions
 
 Two functions are used to create graphical user interfaces
-in Red: view and layout.
+in Red: /*view*/ and /*layout*/.
 
 The layout function creates a set of graphical objects.  These
-objects are called faces.  You describe faces by providing
+objects are called *faces*.  You describe faces by providing
 descriptions in a block that is passed to the layout function.
 
 The view function displays faces that were previously created
@@ -69,7 +69,7 @@ makes it much easier for you to express user interfaces.
 
 ===Styles
 
-Styles describe faces.  The examples above use the text and
+*Styles* describe *faces* in VID.  The examples above use the text and
 button styles to specify a text line and a push button. Red has
 27 predefined styles, and you can easily create your own custom
 styles.  Here are a few example styles used with layout:
@@ -88,20 +88,20 @@ styles.  Here are a few example styles used with layout:
 		field 100 "Text Entry Field"
 	]
 
-The words like h4, box, text, button, text-list, check, radio,
-and field are styles.
+The words like /h4/, /box/, /text/, /button/, /text-list/, /check/, /radio/,
+and /field/ are styles.
 
 ===Facets
 
-Facets let you modify a style.  For instance, you can change
-the text, color, size, font, image, and other facets of a style.
+*Facets* let you modify a style.  For instance, you can change
+the /text/, /color/, /size/, /font/, /image/, and other facets of a style.
 
 Facets follow the style name.  Here is an example that shows
-how you modify the text style to be bold and navy blue:
+how you modify the text style to be {navy}*bold and navy blue*{black}:
 
 	view [text bold font-color navy "Facets are easy to use."]
 
-The words bold and navy are not styles.  They are facets 
+The words /bold/ and /navy/ are not styles.  They are facets 
 that modify a style. 
 
 Facets can appear in any order, so you don't have to remember
@@ -111,7 +111,7 @@ written as:
 	view [text "Facets are easy to use." font-color navy bold]
 
 There are many facets that can be used.  Here is an example that
-creates bold red text centered in a black box.
+creates {red}*bold red*{black} text centered in a black box.
 
 	view [text 300 bold black red center "Red Text"]
 
@@ -135,8 +135,8 @@ old style name and its facets.
 		button "Normal"
 	]
 
-So, if you wanted to create a text style for big, bold, underlined,
-yellow text:
+So, if you wanted to create a text style for *_big, bold, underlined,
+yellow_* text:
 
 	view [
 		backdrop silver below
