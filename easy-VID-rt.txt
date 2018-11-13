@@ -39,6 +39,11 @@ examples above to see how they will appear on your screen.
 Click on their close box to remove them.  All of the examples
 that follow can be viewed this way.
 
+!You can also play with the example code by ctrl-clicking on it.
+Edit the code in area and push "Show" button to see the result.
+Push "Close" to close the window or just click on some other
+example to work with it. If needed, resize the window.
+
 ===Two Basic Functions
 
 Two functions are used to create graphical user interfaces
@@ -111,7 +116,7 @@ written as:
 	view [text "Facets are easy to use." font-color navy bold]
 
 There are many facets that can be used.  Here is an example that
-creates {red}*bold red*{black} text centered in a black box.
+creates {#black#} {red}*bold red*{black} {#} text centered in a black box.
 
 	view [text 300 bold black red center "Red Text"]
 
@@ -135,8 +140,8 @@ old style name and its facets.
 		button "Normal"
 	]
 
-So, if you wanted to create a text style for *_big, bold, underlined,
-yellow_* text:
+So, if you wanted to create a text style for [10]{#silver#} {yellow}*_big, bold, underlined,
+yellow_*{black} {#}[] text:
 
 	view [
 		backdrop silver below
