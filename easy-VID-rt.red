@@ -1,11 +1,10 @@
 Red [
 	Title: "VID Tutorial"
 	Author: "Carl Sassenrath"
-	Original-Date: 1-Oct-2000
+	Date: 1-Oct-2000
 	Redaptor: "Toomas Vooglaid"
 	Redate: 12-Nov-2018
-	Purpose: {Adaptation of original REBOL easy-VID (http://www.rebol.com/view/reb/easyvid.r) 
-		to Red with multi-slot rich text}
+	Purpose: {Adaptation of original REBOL easy-VID (http://www.rebol.com/view/reb/easyvid.r) to Red with multi-slot rich text}
 	Needs: 'View
 ]
 context [
@@ -22,7 +21,12 @@ context [
 
 	rt-ops: [#"*" <b> #"/" <i> #"_" <u>] 
 	inside-b?: inside-i?: inside-u?: no 
-	special: charset "*_/\{"
+	special: charset "*_/\{["
+	digit: charset "0123456789"
+	int: [some digit]
+	alpha: charset [#"a" - #"z" #"A" - #"Z"]
+	str: [#"^"" some [alpha | space] #"^""]
+	font-rule: [#"[" copy fnt to #"]" skip]
 	rt-rule: [(inside?: no)
 		collect some [
 			#"\" keep copy skip
@@ -32,11 +36,12 @@ context [
 			|	#"_" keep (also either inside-u? [</u>][<u>] inside-u?: not inside-u?)
 			|	"{#}" keep (</bg>)
 			|	"{#" copy bg to "#}" keep (<bg>) keep (to-word bg) 2 skip 
-			;|	"{}" keep (/f)
+			|	"[]" keep (</font>)
+			|	font-rule keep (<font>) keep (either 1 = length? fnt: load/all fnt [first fnt][fnt]) 
 			|	#"{" copy clr to #"}" keep (to-word clr) skip
 			] 
 		|	newline keep (" ")
-		|	keep copy x to [special | newline | end]
+		|	keep copy _ to [special | newline | end]
 		] 
 	]
 	
@@ -114,7 +119,11 @@ context [
 		rtb/size/x: 480
 		append rtb/data reduce [as-pair 1 length? rtb/text "Consolas"]
 		sz: size-text rtb
-		repend layo ['fill-pen silver 'box pos: as-pair 10 pos-y as-pair 480 pos/y + sz/y + 14 'fill-pen black]
+		repend layo [
+			'fill-pen silver 
+			'box pos: as-pair 10 pos-y as-pair 480 pos/y + sz/y + 14 
+			'fill-pen black
+		]
 		repend layo ['text as-pair 15 pos-y + 7 rtb]
 		pos-y: pos-y + sz/y + 27
 	]
@@ -145,6 +154,34 @@ context [
 		xview: view/no-wait/options compose xcode [offset: xy]  
 	]
 
+	show-edit-box: func [code sz][
+		if xview [xy: xview/offset - 8x31  unview/only xview]
+		xcode: load/all code;face/text
+		if not block? xcode [xcode: reduce [xcode]] 
+		either here: select xcode either 'layout = second xcode ['layout]['view][
+			xcode: here
+		][
+			unless find [title backdrop size] first xcode [insert xcode 'below]
+		]
+		xcode: head insert mold xcode "view "
+		xview: view/no-wait/flags/options compose [
+			on-resizing [
+				win: face
+				foreach-face face [
+					switch face/type [
+						area [face/size: win/size - face/offset - 45 ]
+						button [face/offset/y: win/size/y - face/size/y - 10]
+					]
+				]
+			]
+			below 
+			ar: area focus (xcode) (sz) 
+			across 
+			button "Show" [do ar/text]
+			button "Close" [unview]
+		] 'resize [offset: xy]
+	]
+
 	parse detab/size content 3 rules  
 
 	show-page: func [i /local blk][
@@ -172,13 +209,16 @@ context [
 		panel page-size [
 			origin 0x0
 			f-box: rich-text page-size white draw []
-			on-down [parse face/draw [some [
-				bx: 'box pair! pair! if (within? event/offset bx/2 bx/3 - bx/2) (
-					show-example select first find bx object! 'text
-				)
-			|	skip
-			]]]
-			at 0x0 page-border: box with [
+			on-down [
+				parse face/draw [some [
+					bx: 'box pair! pair! if (within? event/offset bx/2 sz: bx/3 - bx/2) (
+						code: select first find bx object! 'text
+						either event/ctrl? [show-edit-box code sz][show-example code]
+					)
+				|	skip
+				]]
+			]
+		at 0x0 page-border: box with [
 				size: page-size 
 				draw: compose [pen gray box 0x0 (page-size - 1)]
 			]
