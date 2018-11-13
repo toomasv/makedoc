@@ -1,7 +1,7 @@
 Red [
 	Title: "VID Tutorial"
 	Author: "Carl Sassenrath"
-	Date: 1-Oct-2000
+	Original-Date: 1-Oct-2000
 	Redaptor: "Toomas Vooglaid"
 	Redate: 12-Nov-2018
 	Purpose: {Adaptation of original REBOL easy-VID (http://www.rebol.com/view/reb/easyvid.r) to Red with multi-slot rich text}
