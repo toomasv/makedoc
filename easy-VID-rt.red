@@ -28,9 +28,12 @@ context [
 				#"*" keep (also either inside-b? [</b>][<b>] inside-b?: not inside-b?) 
 			|	#"/" keep (also either inside-i? [</i>][<i>] inside-i?: not inside-i?) 
 			|	#"_" keep (also either inside-u? [</u>][<u>] inside-u?: not inside-u?)
+			|	"{#}" keep (</bg>)
+			|	"{#" copy bg to "#}" keep (<bg>) keep (to-word bg) 2 skip 
+			;|	"{}" keep (/f)
+			|	#"{" copy clr to #"}" keep (to-word clr) skip
 			] 
-		|	#"{" copy clr to #"}" keep (to-word clr) skip
-		|	newline  keep (" ")
+		|	newline keep (" ")
 		|	keep copy x to [special | newline | end]
 		] 
 	]
@@ -118,8 +121,7 @@ context [
 		remove back tail code
 		blk: parse code rt-rule
 		if " " = first blk [remove blk]
-		insert blk [b]
-		append blk [/b]
+		append insert blk [b][/b]
 		rtb: rtd-layout blk
 		append rtb/data reduce [as-pair 1 length? rtb/text 150.0.0]
 		rtb/size/x: 460
@@ -146,21 +148,23 @@ context [
 	show-page: func [i /local blk][
 		i: max 1 min length? sections i
 		if blk: pick layouts this-page: i [
-			tl/selected: this-page
-			f-box/draw: blk show f-box
+			probe tl/selected: this-page
+			f-box/draw: blk ;show f-box
 		]
 	]
 
 	main: layout compose [
 		title "VID: Visual Interface Dialect"
-		on-key [switch event/key [
-			up left [show-page this-page - 1]
-			down right [show-page this-page + 1]
-			home [show-page 1]
-			end [show-page length? sections]
-		] show tl]
+		on-key [
+			switch event/key [
+				up left [show-page this-page];[show-page this-page - 1]
+				down right [show-page this-page];[show-page this-page + 1]
+				home [show-page 1]
+				end [show-page length? sections]
+			] 
+		]
 		h4 title-line bold return
-		tl: text-list 160x480 bold select 1 white black data sections on-change [probe "hi"
+		tl: text-list 160x480 bold select 1 white black data sections on-change [
 			show-page face/selected
 		]
 		panel page-size [
