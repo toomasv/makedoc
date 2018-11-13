@@ -148,7 +148,7 @@ context [
 	show-page: func [i /local blk][
 		i: max 1 min length? sections i
 		if blk: pick layouts this-page: i [
-			probe tl/selected: this-page
+			tl/selected: this-page
 			f-box/draw: blk ;show f-box
 		]
 	]
