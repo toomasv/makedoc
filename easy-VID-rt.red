@@ -165,6 +165,7 @@ context [
 		]
 		xcode: head insert mold xcode "view "
 		xview: view/no-wait/flags/options compose [
+			title "Play with code"
 			on-resizing [
 				win: face
 				foreach-face face [
