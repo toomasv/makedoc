@@ -5,6 +5,7 @@ Red [
 	Redaptor: "Toomas Vooglaid"
 	Redate: 10-Nov-2018
 	Purpose: {Adaption of original REBOL easy-VID (http://www.rebol.com/view/reb/easyvid.r) to Red}
+	Needs: 'View
 ]
 
 Redate: 10-Nov-2018
