@@ -10,7 +10,7 @@ Red [
     Title: "Text to HTML Converter"
     Date: 29-Feb-2000
 	Red-version: 7-Nov-2018
-    File: %texthtml.red
+    File: %text2html.red
     Author: "Carl Sassenrath"
 	Reditor: "Toomas Vooglaid"
     Usage: {
@@ -44,12 +44,13 @@ detab: func [
 	str [string!] 
 	/size number [integer!]
 ][
-	number: any [number 4] replace/all str #"^-" append/dup "" #" " number
+	number: any [number 4] 
+	replace/all str #"^-" append/dup "" #" " number
 ]
 
 ;;;;;;;;;;;;;;
 
-text-to-html: make object! [
+text2html: make object! [
     html: make string! 10000
     emit: func [data] [append html reduce data]
 
@@ -89,6 +90,6 @@ text-to-html: make object! [
 
 file: to-file ask "Filename? "
 if not find file "." [append file ".txt"]
-data: text-to-html/convert read file
+data: text2html/convert read file
 write head change/part find file "." ".html" tail file data  ; toomasv added /part to change
 ;quit
