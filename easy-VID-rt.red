@@ -3,10 +3,10 @@ Red [
 	Original: "Carl Sassenrath"
 	Original-date: 1-Oct-2000
 	Redaptor: "Toomas Vooglaid"
-	Date: 12-Nov-2018
+	Redate: 12-Nov-2018
 	Purpose: {Adaptation of original REBOL easy-VID (http://www.rebol.com/view/reb/easyvid.r) to Red with multi-slot rich text}
 	Needs: 'View
-	Linked: [%rebolize.red %easy-VID-rt.txt]
+	Linked: [%easy-VID-rt.txt %rebolize.red]
 ]
 context [
 	Redate: 12-Nov-2018
@@ -147,7 +147,7 @@ context [
 		if xview [xy: xview/offset - 3x26  unview/only xview]
 		xcode: load/all code;face/text
 		if not block? xcode [xcode: reduce [xcode]] 
-		either here: select xcode either 'layout = second xcode ['layout]['view][
+		either here: select xcode either find [layout compose] what: second xcode [what]['view][
 			xcode: here
 		][
 			unless find [title backdrop size] first xcode [insert xcode 'below]
@@ -159,12 +159,14 @@ context [
 		if xview [xy: xview/offset - 8x31  unview/only xview]
 		xcode: load/all code;face/text
 		if not block? xcode [xcode: reduce [xcode]] 
-		either here: select xcode either 'layout = second xcode ['layout]['view][
+		either here: select xcode either find [layout compose] what: second xcode [what]['view][
 			xcode: here
 		][
 			unless find [title backdrop size] first xcode [insert xcode 'below]
 		]
-		xcode: head insert mold xcode "view "
+		view-cmd: copy "view "
+		if find xcode paren! [append view-cmd "compose "]
+		xcode: head insert mold xcode view-cmd
 		xview: view/no-wait/flags/options compose [
 			title "Play with code"
 			on-resizing [
