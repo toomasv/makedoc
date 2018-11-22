@@ -4,6 +4,7 @@ Red [
 	Original-date: 1-Oct-2000
 	Redaptor: "Toomas Vooglaid"
 	Redate: 12-Nov-2018
+	Date: 22-Nov-2018
 	Purpose: {Adaptation of original REBOL easy-VID (http://www.rebol.com/view/reb/easyvid.r) to Red with multi-slot rich text}
 	Needs: 'View
 	Linked: [%easy-VID-rt.txt %rebolize.red]
