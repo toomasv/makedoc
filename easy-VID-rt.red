@@ -6,7 +6,7 @@ Red [
 	Redate: 12-Nov-2018
 	Purpose: {Adaptation of original REBOL easy-VID (http://www.rebol.com/view/reb/easyvid.r) to Red with multi-slot rich text}
 	Needs: 'View
-	Linked: [rebolize.red easy-VID-rt.txt]
+	Linked: [%rebolize.red %easy-VID-rt.txt]
 ]
 context [
 	Redate: 12-Nov-2018
