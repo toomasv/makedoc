@@ -41,7 +41,6 @@
 <a class="toc1" href="#section-23">More keywords</a><br>
 <a class="toc1" href="#section-24">More to Come</a><br>
 <h2 id="section-1">Introduction to VID</h2>
-<blockquote>
 <p>Creating custom user interfaces is easy with VID. In half an hour
 you can learn how to use VID to create useful interfaces in {red}Red{black}.</p>
 <ul>
@@ -51,18 +50,14 @@ method of describing user interfaces, yet VID is simple to learn.
 In addition, VID provides a smooth path from basic user interfaces
 to sophisticated applications.</li>
 </ul>
-</blockquote>
 <h3 id="section-1.1">Creating VID Scripts</h3>
-<blockquote>
 <p>Any text editor can be used to create a VID script.  You can
 build the text editor in Red or use your own favorite editor.
 Save your file as text, then run it with Red.</p>
 <p>!Note: Using a word processor like /Word/ or /Wordpad/ is not
 recommended unless you save your files as text. Saving as
 a doc file will not work.</p>
-</blockquote>
 <h2 id="section-2">Minimal Example</h2>
-<blockquote>
 <p>As a minimal example, you can create a window that displays a
 line of text using just one line of code.  Here is an example:</p>
 <pre>
@@ -82,7 +77,6 @@ that follow can be viewed this way.</p>
 Edit the code in area and push "Show" button to see the result.
 Push "Close" to close the window or just click on some other
 example to work with it. If needed, resize the window.</p>
-</blockquote>
 <h2 id="section-3">Two Basic Functions</h2>
 <blockquote>
 <p>Two functions are used to create graphical user interfaces
