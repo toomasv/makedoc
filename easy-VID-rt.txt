@@ -49,11 +49,11 @@ example to work with it. If needed, resize the window.
 Two functions are used to create graphical user interfaces
 in Red: /*view*/ and /*layout*/.
 
-The layout function creates a set of graphical objects.  These
+The *layout* function creates a set of graphical objects.  These
 objects are called *faces*.  You describe faces by providing
 descriptions in a block that is passed to the layout function.
 
-The view function displays faces that were previously created
+The *view* function displays faces that were previously created
 by the layout function. The example below shows how the result
 of the layout function is passed to the view function, and the
 layout is displayed.
@@ -72,25 +72,119 @@ file in Red).
 code, but actually a dialect (VID) of Red.  Using a dialect
 makes it much easier for you to express user interfaces.
 
+===Window attributes
+
+Attributes that determine window's general appearance -
+/*size*/, /*title*/, and /*backdrop*/ - have to appear
+in the beginning of VID block.
+
+---Size
+
+Layout function will automatically calculate the window size from
+the VID block, so you don't generally need to provide size.
+
+	view [text "Window size is calculated automatically."]
+
+However, you can give your window predetermined size:
+
+	view [size 200x150 text "Thus."]
+
+---Title
+
+Title is specified with keyword *title* followed by string.
+If no title is specified "Red: untitled" will appear on title bar.
+
+	view [size 250x50 title "Example"]
+
+---Backdrop
+
+About *backdrop* keyword see below.
+
+===Layout flow
+
+By default faces will be placed across the window from left to right.
+
+	view [field "Enter data" text "Press button" button "OK"]
+
+---Return
+
+To return to the beginning of next row use *return*:
+
+	view [text "Data:" field return text "Press button" button "OK"]
+
+---Below and across
+
+But you can also change the default flow direction by kewords
+*below* and *across*. Layout function will remember the change position.
+
+	view [
+		text "Data:" 
+		below field hint "First" 
+		across field hint "Second" 
+		button "OK"
+	]
+
+If currrent flow is /below/, /return/ will bring you to start of next column:
+
+	view [below field "F1" field "F2" return field "F3" button "OK"]
+
+===Layout spacings
+
+By default layout function starts from 10x10 and spaces faces 10pt across
+and 10pt below each other. To change this behaviour use *origin* and *space*
+keywords:
+
+	view [
+		origin 0x0 space 0x0 
+		field "F1" field "F2" return 
+		field "F3" field "F4"
+	]
+
+When you want to change spacing for individual face, use *pad*.
+But remember that after pad flow continues from padded position:
+
+	view [pad 0x5 text "Button" pad 0x-10 button field]
+
+---`At` keyword
+
+With *at* keyword you can take a face out of the flow altogether,
+and put it at specific position without affecting the flow of
+other faces:
+
+	view [
+		origin 30x30 
+		text "Normal flow" button "OK"
+		at 0x0 text "Out of flow"
+	]
+
 ===Styles
 
-*Styles* describe *faces* in VID.  The examples above use the text and
-button styles to specify a text line and a push button. Red has
-27 predefined styles, and you can easily create your own custom
+*Styles* describe *faces* in VID.  The examples above use the text, field
+and button styles to specify a text line, a push button and text entry field.
+Red has 27 predefined styles, and you can easily create your own custom
 styles.  Here are a few example styles used with layout:
 
 	view [
 		below
 		h4 "Style Examples"
 		box red 240x2
-		text bold "There are 27 styles built into Red."
-		button "Great"
-		text-list 120x80 data ["this" "is" "text-list"] 
+		text bold "There are 27 styles built into Red. Some examples:"
+		button "Button"
 		across
+		text "Tab-panel:" 60 tab-panel 200x125 [
+			"Text-list" [text-list 120x80 data ["this" "is" "text-list"]]
+			"Drop-list" [drop-list 120x80 data ["this" "is" "drop-list"]]
+			"Drop-down" [drop-down 120x80 data ["this" "is" "drop-down"]]
+		] return
 		check "Checkbox"
-		radio "Radio-1" radio "Radio-2"
-		return
-		field 100 "Text Entry Field"
+		radio "Radio-1" radio "Radio-2"	return 
+		text "Field:" 60 field 100 hint "Text Entry Field" return
+		text 60 "Area:" area return
+		group-box "Group-box" [
+			below
+			text "Slider:" slider 80%
+			text "Progress:" progress data 40%
+		]
 	]
 
 The words like /h4/, /box/, /text/, /button/, /text-list/, /check/, /radio/,
@@ -101,13 +195,15 @@ and /field/ are styles.
 *Facets* let you modify a style.  For instance, you can change
 the /text/, /color/, /size/, /font/, /image/, and other facets of a style.
 
-Facets follow the style name.  Here is an example that shows
-how you modify the text style to be {navy}*bold and navy blue*{black}:
+In VID, facets are modified by keywords or values of corresponding
+datatypes. For simplicity, let's call them all facets fo now. Facets follow
+the style name.  Here is an example that shows how you modify the text
+style to be {navy}*bold and navy blue*{black}:
 
 	view [text bold font-color navy "Facets are easy to use."]
 
-The words /bold/ and /navy/ are not styles.  They are facets 
-that modify a style. 
+The words /bold/ and /navy/ are not styles.  They are values that
+modify font facet of a style. 
 
 Facets can appear in any order, so you don't have to remember
 which one goes first.  For example, the line above could be
@@ -140,8 +236,8 @@ old style name and its facets.
 		button "Normal"
 	]
 
-So, if you wanted to create a text style for [10]{#silver#} {yellow}*_big, bold, underlined,
-yellow_*{black} {#}[] text:
+So, if you wanted to create a text style for [10]{#silver#}
+{yellow}*_big, bold, underlined, yellow_*{black} {#}[] text:
 
 	view [
 		backdrop silver below
@@ -175,8 +271,8 @@ will now appear as:
 ===Face Sizes
 
 The size of a face depends on its style.  Most styles, such as buttons,
-toggles, boxes, checks, text-lists, and fields, have a convenient default
-size.  Here are some examples.
+boxes, checks, text-lists, and fields, have a convenient default
+size.  Here are some examples:
 
 	button "Button"
 	box blue
@@ -193,9 +289,10 @@ Images will use whatever their source size is:
 	button "Longer text on button"
 	image %ferns.jpg
 
-You can change the size of any face by providing a size facet. The size can 
-be an integer or a pair.  An integer specifies the width of the face. A pair 
-specifies both width and height. Images will be stretched to fit the size.
+You can change the size of any face by providing a value for size facet.
+The size can be an integer or a pair.  An integer specifies the width
+of the face. A pair specifies both width and height. Images will be
+stretched to fit the size.
 
 	button 200 "Big Button"
 	button 200x100 "Huge Button"
@@ -205,7 +302,7 @@ specifies both width and height. Images will be stretched to fit the size.
 ===Color Facets
 
 Most styles have a default color.  For example the text styles will default
-to a black text on snow background.  To modify the color of a face, provide
+to a /black/ text on /snow/ background.  To modify the color of a face, provide
 a color facet:
 
 	area red "Red area"
@@ -225,7 +322,7 @@ of the text:
 	text "Yellow on red background" red yellow
 	h5 "White on Navy Blue" navy white
 	box "Multicolor" olive red
-	text-list "Multicolor" blue orange data ["One" "Two" "Three"]
+	text-list blue orange data ["One" "Two" "Three"]
 
 ===Text Facets
 
@@ -244,10 +341,10 @@ strings will be shown in list.
 		"Monday" "Tuesday" "Wednesday" "Thursday" "Friday"
 	]
 	drop-down data [
-		"Monday" "Tuesday" "Wednesday" "Thursday" "Friday"
+		"January" "February" "March" "April" "May" "..."
 	]
 
-When other datatypes need to be displayed as text, use the form
+When other datatypes need to be displayed as text, use the *form*
 function to convert them first:
 
 	button 200 (form now)
@@ -255,7 +352,9 @@ function to convert them first:
 
 !Note that in last example parens are used to evaluate expressions.
 To use this feature in your script use `compose` command before
-layout block.
+layout block. Like this:
+
+	view compose [button 200 (form now)]
 
 ===Text Style
 
@@ -267,7 +366,7 @@ to set the font, style, color, size and other attributes.
 	text "Italic" italic
 	text "Underline" underline
 	text "Bold italic underline" bold italic underline
-	text "Big" font-size 32
+	text "Big red text" font-size 32 font-color red
 	text "Serif style text" font-name font-serif
 
 Text also includes these predefined styles:
@@ -278,9 +377,19 @@ Text also includes these predefined styles:
 	h4 "Heading 4"
 	h5 "Heading 5"
 
+There are also alignment keywords: /left, center,
+right, top, middle, bottom/:
+
+	box 300x100 "Right, middle" right middle
+
+Some faces, like /text/, wrap by default, others, like /area/, do not:
+
+	text no-wrap 100x80 "Not wrapping longer text than fits the face"
+	area wrap 100x80 "Wrapping longer text than fits the face"
+
 ===Text Entry Fields
 
-Text input fields are field and area.  A text input field can 
+Text input fields are field and area.  A text input field can
 be created with:
 
 	field
@@ -308,9 +417,13 @@ horizontally, provide the wrap option:
 
 	area wrap
 
-===Text Lists
+===List boxes
 
-Text lists are easy to create with block of strings in data facet.
+List-boxes are *text-list*, *drop-list* and *drop-down*. First
+creates a box with list of selections, second a drop list of selections
+and third a field with drop-down selection list.
+
+List boxes are easy to create with block of strings in /data/ facet.
 Here is an example:
 
 	text-list data ["Eureka" "Ukiah" "Mendocino"]
@@ -319,18 +432,45 @@ Provided block may contain different types of elements but only
 string-based types are shown.  Here is example of block with
 mixed types:
 
-	text-list data ["First" 1 "Second" two "Third" [3]]
+	drop-list data ["First" 1 "Second" two "Third" [3]]
 
 String-based types are formed into standard strings.  Here is a
 list of all the files in your current directory:
 
-	text-list data read %.
+	drop-down data read %.
 
 If not "stringy", elements you want to be displayed need to be
 converted to strings first.  Here is a list of all the words Red
 has scanned:
 
 	text-list data split form words-of :system/words space
+
+You can pre-select one of entries in list by by providing *select*
+keyword:
+
+	drop-list data ["January" "February" "March"] select 2
+
+===Panels or Face-Groups
+
+For grouping faces the standard way is to use either *panel*:
+
+	across text "Before"
+	panel [below field field button]
+	text "After"
+
+or *tab-panel* for several groups:
+
+	tab-panel [
+		"First" [h3 "First tab"]
+		"Second" [h3 "Second tab"]
+	]
+
+*Group-box* is a temeporary face and does not well resize, but in
+static layouts it can be used with a string showing group's description:
+
+	group-box "Group-box demo" [
+		field field return button "OK"
+	]
 
 ===Images
 
@@ -362,6 +502,11 @@ A backdrop image can be a file, URL, or image data:
 	backdrop %ferns.jpg
 	box "Image Backdrop" bold font [color: white size: 18]
 
+And here is url backdrop:
+
+	backdrop http://www.rebol.com/view/reb/ferns.jpg
+	box "Image with url backdrop" bold font [color: white size: 18]
+
 ===Actions
 
 An action can be associated with any face. To do so,
@@ -391,26 +536,91 @@ For example, the slider will update the progress bar:
 	slider 200x16 [p1/data: face/data]
 	p1: progress
 
-!More on actions needed...
+===Naming faces
+
+To refer to face's facets in actors you can use either /face/ to
+refer to the actors owner-face:
+
+	text-list data ["Monday" "Tuesday" "Wednesday"][
+		print pick face/data face/selected
+	]
+
+... or you can name other faces and refer to them by their name: 
+
+	drop-list data read %. [
+		txt/text: read pick face/data face/selected
+	]
+	txt: area 500x300
+
+There are many actors, but not all of them work for all faces.
+Faces do have default actors which may be defined without proper
+naming, other actor have to be specified by name:
+
+	base 150x50 white "Press mouse-button or key-board"
+	on-down [face/text: "Left-button down"]
+	on-up [face/text: "Left-button up"]
+	on-alt-down [face/text: "Right-button down"]
+	on-alt-up [face/text: "Right-button up"]
+	on-key [face/text: rejoin [#"^"" event/key {" pressed}]]
+
+===Incapacitating faces
+
+*disabled* and *hidden* let you, well, disable and hide faces.
+Notice that VID keyword and face object's property are "negative
+mirrors" of each other:
+
+	f: field disabled button "Enable" [
+		switch face/text [
+			"Enable" [f/enabled?: yes face/text: "Disable"]
+			"Disable" [f/enabled?: no face/text: "Enable"]
+		]
+	]
+
+*hidden* behaves in similar way:
+
+	b: box red hidden 
+	button "Show" [
+		switch face/text [
+			"Show" [b/visible?: yes face/text: "Hide"]
+			"Hide" [b/visible?: no face/text: "Show"]
+		]
+	]
+
+===More keywords
+
+There are several keywords more you need to become acquainted with,
+like *loose*, *focus*, *extra*.
+
+*loose* lets your faces literally loose, so that you can drag these around.
+
+	box red loose field loose button loose
+
+*focus* give specific face the initial focus, so that you can, e.g.
+start immediately typing.
+
+	area focus wrap button "Send"
+
+*extra* has many uses but none of its own. It's a kind of spare facet
+you can assign a task just fit for your application, e.g.
+
+	tl: text-list data read %. extra [] on-change [
+		append face/extra pick face/data face/selected
+	]
+	button "Show" [view/flags [text-list data tl/extra] [modal popup]]
 
 ===More to Come
 
-!Much more to come.  These still need to be covered in this
+!These still need to be covered in this introductory
 tutorial:
 
 	dl: drop-list data [
 		"Faces" [
 			"check" "radio" "slider" "progress" "scroller"
-			"base" "box" "panel" "tab-panel" "drop-list"
-			"drop-down" "group-box" "rich-text"
+			"base" "box" 
 		]
-		"Layout" [
-			"across" "below" "return" "space" "origin"
-			"at" "pad" "do"
-		]
+		"Layout" ["do"]
 		"Keywords" [
-			"extra" "data" "font" "para" "loose" "hidden"
-			"disabled" "select" "focus" "default" "with"
+			"data" "font" "para" "select" "default" "with"
 			"draw" "rate" "react"
 		]
 	]
