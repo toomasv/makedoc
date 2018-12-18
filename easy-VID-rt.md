@@ -3,15 +3,9 @@
 <head>
 <title>Easy VID - Red Visual Interfaces</title>
 <link rel="stylesheet" href="style.css">
-<!--style type="text/css">
-</style-->
 </head>
 <body bgcolor="white">
 <table width="660" cellpadding="4" cellspacing="0" border="0">
-<!-- tr>
-<td><a href="http://www.rebol.com"><img src="http://www.rebol.net/graphics/reb-bare.jpg"
-border=0 alt="Red"></a></td>
-</tr -->
 <tr height="10"><td></td></tr>
 <tr><td><h1>Easy VID - Red Visual Interfaces</h1>
 <h2>Contents:</h2>
@@ -708,7 +702,6 @@ tutorial:</p>
 </pre>
 </blockquote>
 </td></tr><tr>
-<!-- tr><td><img src="http://www.rebol.net/graphics/reb-tail.jpg" border=0></td></tr -->
 <td align="center">
 <span class="tail"><a href="http://www.red-lang.org">MakeDoc2 by Red</a> - 18-Dec-2018</span>
 </td></tr></table>
