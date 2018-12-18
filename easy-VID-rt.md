@@ -51,7 +51,7 @@ border=0 alt="Red"></a></td>
 <p>Creating custom user interfaces is easy with VID. In half an hour
 you can learn how to use VID to create useful interfaces in {red}Red{black}.</p>
 <ul>
-<li>VID* is the */Visual Interface Dialect/*, a dialect of the Red language
+*VID* is the */Visual Interface Dialect/*, a dialect of the Red language
 that is built into every instance of Red. VID provides a powerful
 method of describing user interfaces, yet VID is simple to learn.
 In addition, VID provides a smooth path from basic user interfaces
