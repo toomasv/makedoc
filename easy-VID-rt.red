@@ -11,7 +11,7 @@ Red [
 ]
 context [
 	Redate: 12-Nov-2018
-	unless attempt [rebolized?] [do %rebolize.red]
+	unless attempt [rebolized?] [#include %rebolize.red]
 
 	content: read %easy-VID-rt.txt
 
@@ -103,7 +103,7 @@ context [
 
 	;emit: func ['style data] [repend layo [style data]]
 
-	emit-para: func [data][ 
+	emit-para: func [data [string!]][ 
 		remove back tail data
 		blk: parse data rt-rule
 		if " " = first blk [remove blk]
@@ -114,7 +114,7 @@ context [
 		pos-y: pos-y + sz/y + 10
 	]
 
-	emit-code: func [code] [
+	emit-code: func [code [string!]] [
 		remove back tail code
 		blk: reduce [<b> code </b>] 
 		rtb: rtd-layout blk
@@ -130,7 +130,7 @@ context [
 		pos-y: pos-y + sz/y + 27
 	]
 
-	emit-note: func [code] [
+	emit-note: func [code [string!]] [
 		remove back tail code
 		blk: parse code rt-rule
 		if " " = first blk [remove blk]
@@ -144,7 +144,7 @@ context [
 
 	]
 
-	show-example: func [code][
+	show-example: func [code [string!]][
 		if xview [xy: xview/offset - 3x26  unview/only xview]
 		xcode: load/all code;face/text
 		if not block? xcode [xcode: reduce [xcode]] 
@@ -156,7 +156,7 @@ context [
 		xview: view/no-wait/options compose xcode [offset: xy]  
 	]
 
-	show-edit-box: func [code sz][
+	show-edit-box: func [code [string!] sz [pair!]][
 		if xview [xy: xview/offset - 8x31  unview/only xview]
 		xcode: load/all code;face/text
 		if not block? xcode [xcode: reduce [xcode]] 
@@ -189,14 +189,14 @@ context [
 
 	parse detab/size content 3 rules  
 
-	show-page: func [i /local blk][
+	show-page: func [i [integer!] /local blk [block!]][
 		i: max 1 min length? sections i
 		if blk: pick layouts this-page: i [
 			tl/selected: this-page
 			f-box/draw: blk ;show f-box
 		]
 	]
-
+	f-box: none
 	main: layout compose [
 		title "VID: Visual Interface Dialect"
 		on-key [

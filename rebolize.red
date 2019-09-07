@@ -99,15 +99,15 @@ inform: func [
 
 found?: func [
     "Returns TRUE if value is not NONE."
-    value
+    value [any-type!]
 ][
     not none? :value
 ]
 
 join: func [
     "Concatenates values."
-    value "Base value"
-    rest "Value or block of values"
+    value [any-type!] "Base value"
+    rest [any-type!] "Value or block of values"
 ][
     value: either series? :value [copy value] [form :value]
     repend value :rest
@@ -134,7 +134,7 @@ forskip: func [
     if not positive? skip-num [throw make error! join [script invalid-arg] skip-num]
     if not any [
         series? get word
-        port? get word
+        ;port? get word
     ] [throw make error! {forskip/forall expected word argument to refer to a series or port!}]
     orig: get word
     while [any [not tail? get word (set word orig false)]] [

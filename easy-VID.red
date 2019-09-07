@@ -9,12 +9,12 @@ Red [
 ]
 
 Redate: 10-Nov-2018
-unless attempt [rebolized?] [do %rebolize.red]
+unless attempt [rebolized?] [#include %rebolize.red]
 
 content: read %easy-VID.txt
 
 rt: make face! [type: 'rich-text size: 480x460 line-spacing: 15]
-text-size: func [text][
+text-size: func [text [string!]][
 	rt/text: text
 	size-text rt
 ]
@@ -58,9 +58,9 @@ section: [
 ]
 subsect: [text-line (emit _h5 text)] 
 
-emit: func ['style data] [repend layo [style data]]
+emit: func ['style data [string!]] [repend layo [style data]]
 
-emit-para: func [data][ 
+emit-para: func [data [string!]][ 
 	remove back tail data
 	clear rt/data
 	rt/line-spacing: 15
@@ -69,7 +69,7 @@ emit-para: func [data][
 	repend layo ['par sz data]
 ]
 
-emit-code: func [code] [
+emit-code: func [code [string!]] [
 	remove back tail code
 	rt/data: reduce [as-pair 0 length? code 'bold system/view/fonts/fixed]
 	rt/line-spacing: 15
@@ -78,7 +78,7 @@ emit-code: func [code] [
 	repend layo ['panel silver sz + 0x10 compose [origin 0x5 code (sz) (code) show-example]] 
 ]
 
-emit-note: func [code] [
+emit-note: func [code [string!]] [
 	remove back tail code
 	rt/data: reduce [as-pair 0 length? code 'bold]
 	rt/line-spacing: 15
@@ -112,14 +112,14 @@ page-template: [
 
 parse detab/size content 3 rules  
 
-show-page: func [i /local blk][
+show-page: func [i [integer!] /local blk][
 	i: max 1 min length? sections i
 	if blk: pick layouts this-page: i [
 		tl/selected: this-page
 		f-box/pane: layout/only/options blk [offset: 0x0] show f-box
 	]
 ]
-
+f-box: none
 main: layout compose [
 	title "VID: Visual Interface Dialect"
 	on-key [switch event/key [
@@ -132,16 +132,16 @@ main: layout compose [
 	tl: text-list 160x480 bold select 1 white black data sections on-change [
 		show-page face/selected
 	]
-	f-box: panel 500x480 white
+	f-box: panel 500x480 white draw [pen gray box 0x0 499x479];(f-box/size - 1)]
 	pad -51x-30
 	space 4x10
 	button 20 "<" [show-page this-page - 1]
 	button 20 ">" [show-page this-page + 1]
 	pad -140x5
 	text (form Redate)
-	do [f-box/draw: compose [pen gray box 0x0 (f-box/size - 1)]]
 ]
 view/no-wait main
+;f-box/draw: compose [pen gray box 0x0 (f-box/size - 1)]
 show-page 1
 xy: main/offset + either system/view/screens/1/size/x > 900 [
 	main/size * 1x0 + 8x0][300x300]
